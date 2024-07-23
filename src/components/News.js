@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import loading from "../assets/loading.gif"
 export  default function News(props) {
     
-
     const [state,setMyState]=useState({
         articles: [],
         pageno: 1,
@@ -23,7 +22,7 @@ export  default function News(props) {
         setMyLoading({
             loading: true,
         })
-        let newsData =  await fetch(`https://newsapi.org/v2/top-headlines?country=in&category=${props.category}&apiKey=6a3d4949a08f4f03bc5a2b9da951c955&page=${state.pageno}&pageSize=${state.pageSize}`)
+        let newsData =  await fetch(`https://newsapi.org/v2/top-headlines?country=in&category=${props.category}&apiKey=${process.env.REACT_APP_News_API_KEY}&page=${state.pageno}&pageSize=${state.pageSize}`)
         let response =  await newsData.json();
         let articles = response.articles;
         setMyLoading({
@@ -47,7 +46,7 @@ export  default function News(props) {
         setMyLoading({
             loading: true,
         })
-        let newsData = await fetch(`https://newsapi.org/v2/top-headlines?country=in&category=${props.category}&apiKey=6a3d4949a08f4f03bc5a2b9da951c955&page=${state.pageno + 1}&pageSize=${state.pageSize}`)
+        let newsData = await fetch(`https://newsapi.org/v2/top-headlines?country=in&category=${props.category}&apiKey=${process.env.REACT_APP_News_API_KEY}&page=${state.pageno + 1}&pageSize=${state.pageSize}`)
         
         let response = await newsData.json();
         let articles = response.articles;
@@ -67,7 +66,7 @@ export  default function News(props) {
         setMyLoading({
             loading: true,
         })
-        let newsData = await fetch(`https://newsapi.org/v2/top-headlines?country=in&category=${props.category}&apiKey=6a3d4949a08f4f03bc5a2b9da951c955&page=${state.pageno - 1}&pageSize=${state.pageSize}`)
+        let newsData = await fetch(`https://newsapi.org/v2/top-headlines?country=in&category=${props.category}&apiKey=${process.env.REACT_APP_News_API_KEY}&page=${state.pageno - 1}&pageSize=${state.pageSize}`)
         
         let response = await newsData.json();
         let articles = response.articles;
