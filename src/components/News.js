@@ -1,83 +1,96 @@
-import React, { Component } from 'react'
+import React, { useEffect, useState } from 'react'
 import loading from "../assets/loading.gif"
-export default class News extends Component {
-    constructor() {
-        super();
-        this.state = {
-            articles: [],
-            loading: true,
-            pageno: 1,
-            pageSize: 8
+export  default function News(props) {
+    
 
-        }
-    }
+    const [state,setMyState]=useState({
+        articles: [],
+        pageno: 1,
+        pageSize: 8
 
+    });
 
+    const [setLoading,setMyLoading]=useState({
+        loading:true
+    })
+    
 
-    async componentDidMount() {
-        this.setState({
+    useEffect(  () => {
+        updateNews();
+       },[]);
+
+    const updateNews=async()=>{
+        setMyLoading({
             loading: true,
         })
-        let newsData = await fetch(`https://newsapi.org/v2/top-headlines?country=in&category=business&apiKey=6a3d4949a08f4f03bc5a2b9da951c955&page=${this.state.pageno}&pageSize=${this.state.pageSize}`)
-        let response = await newsData.json();
-       
+        let newsData =  await fetch(`https://newsapi.org/v2/top-headlines?country=in&category=${props.category}&apiKey=6a3d4949a08f4f03bc5a2b9da951c955&page=${state.pageno}&pageSize=${state.pageSize}`)
+        let response =  await newsData.json();
         let articles = response.articles;
-        this.setState({
-            articles: articles,
+        setMyLoading({
             loading: false,
-            pageno: this.state.pageno,
-            pageSize: this.state.pageSize,
+        })
+        setMyState({
+            articles: articles,
+            pageno: state.pageno,
+            pageSize: state.pageSize,
             totalResults: response.totalResults
-
-
         })
     }
+    
 
-    onClickNext = async () => {
-        this.setState({
+
+    
+        
+    
+
+    const onClickNext=async()=> {
+        setMyLoading({
             loading: true,
         })
-        let newsData = await fetch(`https://newsapi.org/v2/top-headlines?country=in&category=business&apiKey=6a3d4949a08f4f03bc5a2b9da951c955&page=${this.state.pageno + 1}&pageSize=${this.state.pageSize}`)
+        let newsData = await fetch(`https://newsapi.org/v2/top-headlines?country=in&category=${props.category}&apiKey=6a3d4949a08f4f03bc5a2b9da951c955&page=${state.pageno + 1}&pageSize=${state.pageSize}`)
         
         let response = await newsData.json();
         let articles = response.articles;
-        this.setState({
-            articles: articles,
+        setMyLoading({
             loading: false,
-            pageno: this.state.pageno + 1,
-            pageSize: this.state.pageSize + 1,
+        })
+        setMyState({
+            articles: articles,
+            pageno: state.pageno + 1,
+            pageSize: state.pageSize,
             totalResults: response.totalResults
 
         })
     }
 
-    onClickPrevious = async () => {
-        this.setState({
+    const onClickPrevious=async()=> {
+        setMyLoading({
             loading: true,
         })
-        let newsData = await fetch(`https://newsapi.org/v2/top-headlines?country=in&category=business&apiKey=6a3d4949a08f4f03bc5a2b9da951c955&page=${this.state.pageno - 1}&pageSize=${this.state.pageSize}`)
+        let newsData = await fetch(`https://newsapi.org/v2/top-headlines?country=in&category=${props.category}&apiKey=6a3d4949a08f4f03bc5a2b9da951c955&page=${state.pageno - 1}&pageSize=${state.pageSize}`)
         
         let response = await newsData.json();
         let articles = response.articles;
-        this.setState({
-            articles: articles,
+        setMyLoading({
             loading: false,
-            pageno: this.state.pageno - 1,
-            pageSize: this.state.pageSize - 1,
+        })
+        setMyState({
+            articles: articles,
+            pageno: state.pageno - 1,
+            pageSize: state.pageSize,
             totalResults: response.totalResults
 
         })
     }
-    render() {
         return (
             <>
-            <div className='text-center'><img src={this.state.loading?loading:""}></img></div>
+            <div className='text-center'><img src={setLoading.loading?loading:""}></img></div>
             <div className="row">
                 
                 {
-                    this.state.articles.map(function (elements) {
-                        return <div className="col-sm" style={{ padding: "18px" }} >
-                            <div className="card" style={{ width: "18rem" }}>
+                  state.articles.map(function (elements) {
+                        return <div className="col-sm" key={elements.url} style={{ padding: "18px" }} >
+                            <div className="card" style={{ width: "18rem","margin": "0 auto" }}>
                                 <img src={elements.urlToImage ? elements.urlToImage : `https://seotest.guwahatiplus.com/public/web/images/default-news.png`} className="card-img-top" alt="..." />
                                 <div className="card-body">
                                     <a href={elements.url} target='_blank'><p className="card-text">{elements.title}</p></a>
@@ -90,16 +103,16 @@ export default class News extends Component {
                 }
                 <nav aria-label="...">
                     <ul className="pagination">
-                        <li className={`page-item ${this.state.pageno <= 1 ? `disabled` : ""} `} >
-                            <a className="page-link" onClick={this.onClickPrevious} >Previous</a>
+                        <li className={`page-item ${state.pageno <= 1 ? `disabled` : ""} `} >
+                            <a className="page-link" onClick={()=>onClickPrevious()} >Previous</a>
                         </li>
-                        <li className={`page-item ${this.state.totalResults / (this.state.pageSize * this.state.pageno) < 1 ? `disabled` : ""}`} >
-                            <a className="page-link" onClick={this.onClickNext}>Next</a>
+                        <li className={`page-item ${state.totalResults / (state.pageSize * state.pageno) < 1 ? `disabled` : ""}`} >
+                            <a className="page-link" onClick={()=>onClickNext()}>Next</a>
                         </li>
                     </ul>
                 </nav>
             </div>
             </>
         )
-    }
+    
 }

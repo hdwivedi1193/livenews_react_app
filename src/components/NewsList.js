@@ -1,17 +1,18 @@
-import React, { Component } from 'react'
+import React from 'react'
 import News from './News'
 
-export default class NewsList extends Component {
-    render() {
-        return (
-            <>
-                    <div className="container" style={{"marginTop":"40px"}}>
-                                <News></News>        
-                    </div>
+export default function NewsList(props) {
+
+    return (
+        <>
+            <div className="container" style={{ "marginTop": "40px" }}>
+                <h1 style={{'textAlign':"center",marginTop:"100px"}}>Latest News</h1>
+                <News category={props.category}></News>
+            </div>
 
 
-            </>
+        </>
 
-        )
-    }
+    )
+
 }
