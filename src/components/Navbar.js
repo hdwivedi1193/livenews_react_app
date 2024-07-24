@@ -1,9 +1,12 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import LoadingBar from 'react-top-loading-bar'
 
 export default function Navbar(props) {
 
     return (
+        <>
+        
         <nav className="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
             <div className="container-fluid">
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
@@ -33,6 +36,7 @@ export default function Navbar(props) {
                 </div>
             </div>
         </nav>
+        </>
     )
 
 }
